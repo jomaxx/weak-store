@@ -4,6 +4,7 @@
   "main": "lib/index.js",
   "module": "lib/index.es.js",
   "license": "MIT",
+  "files": ["lib"],
   "scripts": {
     "build": "rm -rf lib && rollup -c",
     "test": "jest",
