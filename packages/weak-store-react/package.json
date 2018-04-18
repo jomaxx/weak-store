@@ -1,0 +1,29 @@
+{
+  "name": "weak-store-react",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf lib && rollup -c",
+    "test": "jest",
+    "prepublish": "yarn build",
+    "prepublishOnly": "JEST_ENV=production yarn test"
+  },
+  "devDependencies": {
+    "babel-core": "6",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "jest": "^22.4.3",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-testing-library": "^2.1.1",
+    "rollup": "^0.58.1",
+    "rollup-plugin-babel": "^3.0.3",
+    "weak-store": "*"
+  },
+  "dependencies": {
+    "weak-store": "*"
+  }
+}

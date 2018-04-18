@@ -1,0 +1,20 @@
+{
+  "name": "weak-store",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf lib && rollup -c",
+    "test": "jest",
+    "prepublish": "yarn build",
+    "prepublishOnly": "JEST_ENV=production yarn test"
+  },
+  "devDependencies": {
+    "babel-core": "6",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^22.4.3",
+    "rollup": "^0.58.1",
+    "rollup-plugin-babel": "^3.0.3"
+  }
+}
