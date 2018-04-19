@@ -1,6 +1,11 @@
 import React from "react";
 import { createWeakStore } from "weak-store";
-import Context from "./Context";
+
+const Context = React.createContext({
+  getState: namespace => namespace.state,
+  setState: () => {},
+  subscribe: () => () => {}
+});
 
 function getDerivedStateFromProps(nextProps, prevState) {
   if (typeof nextProps.value !== "undefined") return { weakStore: undefined };
@@ -9,11 +14,13 @@ function getDerivedStateFromProps(nextProps, prevState) {
 }
 
 export default class WeakStore extends React.Component {
+  static get Consumer() {
+    return Context.Consumer;
+  }
+
   static get getDerivedStateFromProps() {
     return getDerivedStateFromProps;
   }
-
-  static create = createWeakStore;
 
   state = {};
 

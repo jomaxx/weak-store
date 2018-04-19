@@ -1,12 +1,12 @@
 import React from "react";
-import Context from "./Context";
+import WeakStore from "./WeakStore";
 
 export default function withWeakStore(C) {
   function WithWeakStore(props) {
     return (
-      <Context.Consumer>
+      <WeakStore.Consumer>
         {weakStore => <C weakStore={weakStore} {...props} />}
-      </Context.Consumer>
+      </WeakStore.Consumer>
     );
   }
 
