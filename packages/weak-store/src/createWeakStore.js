@@ -1,25 +1,19 @@
 export default function createWeakStore() {
-  const namespaces = new WeakMap();
+  const state = new WeakMap();
   const listeners = [];
-  let timeout;
 
-  function getState(namespace) {
-    // initialize namespace
-    if (!namespaces.has(namespace)) {
-      namespaces.set(namespace, namespace.state);
-    }
-
-    return namespaces.get(namespace);
+  function getState(key) {
+    // initialize key
+    if (!state.has(key)) state.set(key, key.state);
+    return state.get(key);
   }
 
-  function setState(namespace, nextState) {
-    namespaces.set(
-      namespace,
-      typeof nextState === "function"
-        ? nextState(getState(namespace))
-        : nextState
-    );
-
+  function setState(key, updater) {
+    const prevState = getState(key);
+    const nextState =
+      typeof updater === "function" ? updater(prevState) : updater;
+    if (nextState === null) return;
+    state.set(key, Object.assign({}, prevState, nextState));
     listeners.forEach(listener => listener());
   }
 

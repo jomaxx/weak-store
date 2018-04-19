@@ -4,11 +4,10 @@
   "main": "lib/index.js",
   "module": "lib/index.es.js",
   "license": "MIT",
-  "files": [
-    "lib"
-  ],
+  "files": ["lib"],
   "scripts": {
-    "build": "rm -rf lib && rollup -c",
+    "prebuild": "rm -rf lib",
+    "build": "rollup -c",
     "test": "jest",
     "prepublish": "yarn build",
     "prepublishOnly": "JEST_ENV=production yarn test"

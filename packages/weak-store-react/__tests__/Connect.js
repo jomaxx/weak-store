@@ -4,7 +4,7 @@ import { createWeakStore, WeakStore, Connect } from "weak-store-react";
 
 afterEach(ReactTest.cleanup);
 
-const counter = { state: 0 };
+const counter = { state: { value: 0 } };
 
 test("has initial state", () => {
   const spy = jest.fn(() => null);
@@ -15,7 +15,7 @@ test("has initial state", () => {
     </WeakStore>
   );
 
-  expect(spy.mock.calls[0][0].state).toBe(0);
+  expect(spy.mock.calls[0][0].state.value).toBe(0);
   expect(spy).toHaveBeenCalledTimes(1);
 });
 
@@ -28,9 +28,9 @@ test("subscribes", async () => {
     </WeakStore>
   );
 
-  spy.mock.calls[0][0].setState(1);
+  spy.mock.calls[0][0].setState({ value: 1 });
 
-  expect(spy.mock.calls[1][0].state).toBe(1);
+  expect(spy.mock.calls[1][0].state.value).toBe(1);
   expect(spy).toHaveBeenCalledTimes(2);
 });
 
@@ -45,7 +45,7 @@ test("unsubscribes", async () => {
 
   spy.mock.calls[0][0].setState(1);
 
-  expect(spy.mock.calls[0][0].state).toBe(0);
+  expect(spy.mock.calls[0][0].state.value).toBe(0);
   expect(spy).toHaveBeenCalledTimes(1);
 });
 
@@ -58,9 +58,9 @@ test("sets state", async () => {
     </WeakStore>
   );
 
-  spy.mock.calls[0][0].setState(1);
+  spy.mock.calls[0][0].setState({ value: 1 });
 
-  expect(spy.mock.calls[1][0].state).toBe(1);
+  expect(spy.mock.calls[1][0].state.value).toBe(1);
   expect(spy).toHaveBeenCalledTimes(2);
 });
 
@@ -80,11 +80,11 @@ test("swaps weakStore", () => {
     { container }
   );
 
-  spy.mock.calls[0][0].setState(1);
-  spy.mock.calls[1][0].setState(2);
+  spy.mock.calls[0][0].setState({ value: 1 });
+  spy.mock.calls[1][0].setState({ value: 2 });
 
-  expect(spy.mock.calls[0][0].state).toBe(0);
-  expect(spy.mock.calls[1][0].state).toBe(0);
-  expect(spy.mock.calls[2][0].state).toBe(2);
+  expect(spy.mock.calls[0][0].state.value).toBe(0);
+  expect(spy.mock.calls[1][0].state.value).toBe(0);
+  expect(spy.mock.calls[2][0].state.value).toBe(2);
   expect(spy).toHaveBeenCalledTimes(3);
 });
