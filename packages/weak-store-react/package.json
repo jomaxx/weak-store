@@ -1,6 +1,6 @@
 {
   "name": "weak-store-react",
-  "version": "0.1.0-6",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
   "license": "MIT",
@@ -26,9 +26,9 @@
     "react-testing-library": "^2.1.1",
     "rollup": "^0.58.1",
     "rollup-plugin-babel": "^3.0.3",
-    "weak-store": "^0.1.0-6"
+    "weak-store": "^0.1.0"
   },
   "dependencies": {
-    "weak-store": "^0.1.0-6"
+    "weak-store": "^0.1.0"
   }
 }
