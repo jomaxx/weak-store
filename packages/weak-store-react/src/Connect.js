@@ -1,16 +1,19 @@
 import React from "react";
-import Context from "./Context";
+import withWeakStore from "./withWeakStore";
 
 function getDerivedStateFromProps(nextProps, prevState) {
   const nextState = {
-    to: nextProps.to,
-    state: nextProps.store.getState(nextProps.to),
-    setState: nextProps.store.setState.bind(null, nextProps.to)
+    state: nextProps.weakStore.getState(nextProps.to)
   };
 
-  return nextState.to === prevState.to && nextState.state === prevState.state
-    ? null
-    : nextState;
+  if (nextProps.to !== prevState.UNSAFE_to) {
+    nextState.UNSAFE_to = nextProps.to;
+    nextState.setState = nextProps.weakStore.setState.bind(null, nextProps.to);
+  } else if (nextState.state === prevState.state) {
+    return null;
+  }
+
+  return nextState;
 }
 
 class Connect extends React.PureComponent {
@@ -23,7 +26,7 @@ class Connect extends React.PureComponent {
   componentDidMount() {
     const updater = getDerivedStateFromProps.bind(null, this.props);
 
-    this.componentWillUnmount = this.props.store.subscribe(() => {
+    this.componentWillUnmount = this.props.weakStore.subscribe(() => {
       this.setState(updater);
     });
 
@@ -41,10 +44,4 @@ class Connect extends React.PureComponent {
   }
 }
 
-export default function ConnectWrapper(props) {
-  return (
-    <Context.Consumer>
-      {store => <Connect store={store} {...props} />}
-    </Context.Consumer>
-  );
-}
+export default withWeakStore(Connect);
