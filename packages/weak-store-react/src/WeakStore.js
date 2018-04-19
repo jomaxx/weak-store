@@ -1,6 +1,7 @@
 import React from "react";
 import { createWeakStore } from "weak-store";
 
+/* istanbul ignore next */
 const Context = React.createContext({
   getState: namespace => namespace.state,
   setState: () => {},
@@ -8,7 +9,8 @@ const Context = React.createContext({
 });
 
 function getDerivedStateFromProps(nextProps, prevState) {
-  if (typeof nextProps.value !== "undefined") return { weakStore: undefined };
+  if (typeof nextProps.value !== "undefined") return { value: undefined };
+  /* istanbul ignore next */
   if (prevState.value) return null;
   return { value: createWeakStore() };
 }

@@ -3,17 +3,25 @@ import withWeakStore from "./withWeakStore";
 
 function getDerivedStateFromProps(nextProps, prevState) {
   const nextState = {
-    state: nextProps.weakStore.getState(nextProps.to)
+    to: nextProps.to,
+    setState: nextProps.weakStore.setState,
+    value: {
+      state: nextProps.weakStore.getState(nextProps.to)
+    }
   };
 
-  if (nextProps.to !== prevState.UNSAFE_to) {
-    nextState.UNSAFE_to = nextProps.to;
-    nextState.setState = nextProps.weakStore.setState.bind(null, nextProps.to);
-  } else if (nextState.state === prevState.state) {
-    return null;
+  const hasChanges =
+    !prevState.value ||
+    nextState.to !== prevState.to ||
+    nextState.value.state !== prevState.value.state ||
+    nextState.setState !== prevState.setState;
+
+  if (hasChanges) {
+    nextState.value.setState = nextState.setState.bind(null, nextState.to);
+    return nextState;
   }
 
-  return nextState;
+  return null;
 }
 
 class Connect extends React.PureComponent {
@@ -21,10 +29,10 @@ class Connect extends React.PureComponent {
     return getDerivedStateFromProps;
   }
 
-  state = getDerivedStateFromProps(this.props, {});
+  state = {};
 
   componentDidMount() {
-    const updater = getDerivedStateFromProps.bind(null, this.props);
+    const updater = state => getDerivedStateFromProps(this.props, state);
 
     this.componentWillUnmount = this.props.weakStore.subscribe(() => {
       this.setState(updater);
@@ -34,13 +42,13 @@ class Connect extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.to === prevProps.to) return;
+    if (this.props.weakStore === prevProps.weakStore) return;
     this.componentWillUnmount();
     this.componentDidMount();
   }
 
   render() {
-    return this.props.children(this.state);
+    return this.props.children(this.state.value);
   }
 }
 

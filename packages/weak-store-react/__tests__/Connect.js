@@ -6,10 +6,10 @@ afterEach(ReactTest.cleanup);
 
 const counter = { state: 0 };
 
-test("connects to namespace", () => {
+test("has initial state", () => {
   const spy = jest.fn(() => null);
 
-  ReactTest.renderIntoDocument(
+  ReactTest.render(
     <WeakStore>
       <Connect to={counter}>{spy}</Connect>
     </WeakStore>
@@ -20,55 +20,71 @@ test("connects to namespace", () => {
 });
 
 test("subscribes", async () => {
-  const weakStore = createWeakStore();
   const spy = jest.fn(() => null);
 
-  ReactTest.renderIntoDocument(
-    <WeakStore value={weakStore}>
+  ReactTest.render(
+    <WeakStore>
       <Connect to={counter}>{spy}</Connect>
     </WeakStore>
   );
 
-  weakStore.setState(counter, 1);
+  spy.mock.calls[0][0].setState(1);
 
   expect(spy.mock.calls[1][0].state).toBe(1);
   expect(spy).toHaveBeenCalledTimes(2);
 });
 
 test("unsubscribes", async () => {
-  const weakStore = createWeakStore();
   const spy = jest.fn(() => null);
 
-  ReactTest.renderIntoDocument(
-    <WeakStore value={weakStore}>
+  ReactTest.render(
+    <WeakStore>
       <Connect to={counter}>{spy}</Connect>
     </WeakStore>
   ).unmount();
 
-  weakStore.setState(counter, 1);
+  spy.mock.calls[0][0].setState(1);
 
   expect(spy.mock.calls[0][0].state).toBe(0);
   expect(spy).toHaveBeenCalledTimes(1);
 });
 
 test("sets state", async () => {
-  const weakStore = createWeakStore();
-  const button = React.createRef();
-  const spy = jest.fn(namespace => (
-    <button
-      onClick={() => namespace.setState(state => state + 1)}
-      ref={button}
-    />
-  ));
+  const spy = jest.fn(() => null);
 
-  ReactTest.renderIntoDocument(
-    <WeakStore value={weakStore}>
+  ReactTest.render(
+    <WeakStore>
       <Connect to={counter}>{spy}</Connect>
     </WeakStore>
   );
 
-  ReactTest.fireEvent.click(button.current);
+  spy.mock.calls[0][0].setState(1);
 
   expect(spy.mock.calls[1][0].state).toBe(1);
   expect(spy).toHaveBeenCalledTimes(2);
+});
+
+test("swaps weakStore", () => {
+  const spy = jest.fn(() => null);
+
+  const { container } = ReactTest.render(
+    <WeakStore>
+      <Connect to={counter}>{spy}</Connect>
+    </WeakStore>
+  );
+
+  ReactTest.render(
+    <WeakStore value={createWeakStore()}>
+      <Connect to={counter}>{spy}</Connect>
+    </WeakStore>,
+    { container }
+  );
+
+  spy.mock.calls[0][0].setState(1);
+  spy.mock.calls[1][0].setState(2);
+
+  expect(spy.mock.calls[0][0].state).toBe(0);
+  expect(spy.mock.calls[1][0].state).toBe(0);
+  expect(spy.mock.calls[2][0].state).toBe(2);
+  expect(spy).toHaveBeenCalledTimes(3);
 });

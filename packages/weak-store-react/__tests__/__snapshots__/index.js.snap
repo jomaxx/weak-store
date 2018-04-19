@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`has exports 1`] = `
+Object {
+  "Connect": [Function],
+  "WeakStore": [Function],
+  "createWeakStore": [Function],
+  "withWeakStore": [Function],
+}
+`;

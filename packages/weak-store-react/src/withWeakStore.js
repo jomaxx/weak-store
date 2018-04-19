@@ -10,6 +10,7 @@ export default function withWeakStore(C) {
     );
   }
 
+  /* istanbul ignore next */
   WithWeakStore.displayName = `withWeakStore(${C.displayName ||
     C.name ||
     "Component"})`;
