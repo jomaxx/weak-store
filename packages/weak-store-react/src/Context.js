@@ -1,9 +1,7 @@
 import React from "react";
 
-const { Provider, Consumer } = React.createContext({
-  getState: () => {},
+export default React.createContext({
+  getState: namespace => namespace.state,
   setState: () => {},
   subscribe: () => () => {}
 });
-
-export { Provider, Consumer };

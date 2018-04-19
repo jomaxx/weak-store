@@ -9,7 +9,7 @@ if (process.env.BABEL_ENV === "rollup") {
       ],
       "react"
     ],
-    plugins: ["transform-class-properties"]
+    plugins: ["transform-class-properties", "external-helpers"]
   };
 } else {
   module.exports = {
