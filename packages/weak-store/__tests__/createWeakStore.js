@@ -17,6 +17,13 @@ test("sets state", () => {
   expect(store.getState(namespace)).toBe(2);
 });
 
+test("sets state (function)", () => {
+  const store = createWeakStore();
+  const namespace = { state: 1 };
+  store.setState(namespace, state => state + 1);
+  expect(store.getState(namespace)).toBe(2);
+});
+
 test("has unique namespaces", () => {
   const store = createWeakStore();
   const namespace = { state: {} };
@@ -41,4 +48,16 @@ test("unsubscribes", () => {
   const namespace = { state: {} };
   store.setState(namespace, {});
   expect(listener).toHaveBeenCalledTimes(0);
+});
+
+test("unsubscribes once", () => {
+  const store = createWeakStore();
+  const listener = jest.fn();
+  store.subscribe(listener);
+  const unsubscribe = store.subscribe(listener);
+  unsubscribe();
+  unsubscribe();
+  const namespace = { state: {} };
+  store.setState(namespace, {});
+  expect(listener).toHaveBeenCalledTimes(1);
 });

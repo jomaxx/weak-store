@@ -1,6 +1,6 @@
 import React from "react";
 import * as ReactTest from "react-testing-library";
-import { createWeakStore, WeakStore, Connect } from "../src";
+import { createWeakStore, WeakStore, Connect } from "weak-store-react";
 
 afterEach(ReactTest.cleanup);
 
